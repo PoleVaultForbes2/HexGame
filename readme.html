@@ -1,0 +1,294 @@
+<meta charset="utf-8" lang="en">  <!-- this line allows UTF-8 characters in the .html file -->
+
+
+                    **P01_Hex**
+
+
+<!--
+
+General
+========
+
+For each of your team's implementations, explain the following (where appropriate and applicable):
+
+- details on calling conventions, input and output data formats, limitations, bugs, and special features.
+- negative aspects of your program (limitations, known bugs)
+- positive aspects (extensions, special features)
+- describe your choice of modularization (abstractions), data structures, and algorithms
+- explain anything you did that is likely to be different from what other students may have done
+- justify any design decisions for which the rationale isn't immediately clear
+
+Feel free to modify the structure of this `readme.html` file to fit the current assignment and to fit how you wish to present your findings.
+
+Take a look at the [Markdeep Feature Demo](https://casual-effects.com/markdeep/features.md.html) to see how you can markup this document.
+
+
+!!! note: Math Typesetting
+    Surround your math with double dollar signs to have [MathJax](https://www.mathjax.org/) typeset it beautifully.
+    To add a tilde in math mode (using dollar signs), use the `\sim` command.
+    If an exponent has more than one character, you must surround it with curly braces.
+    In the example below, the exponent for $T$ must use curly braces, but they aren't required for $N$.
+
+    $$ \sim T^{1.2} N^2 $$
+
+    Note: Typesetting like this is optional; feel free to use plain text if you'd like.
+
+
+Submission
+-----------
+
+Use the CSE LogHistory Plug-in to create a zip file containing all your code, this `readme.html` document, and any additional files of evidence (ex: screenshots).
+If you create a zip by other means, it will include all the files under `tests` and might miss some important files (ex: `.log/history.log`).
+The former will make for a very large zip file; the latter will cause you to lose points.
+
+
+-->
+
+
+Author
+=============
+
+
+<!-- fill out the following table with your information -->
+<!-- Note: wrapping table in div.noheader will hide the table's header -->
+<!-- Note: wrapping table in div.firstcol will style the first column different from other columns -->
+<div class="noheader firstcol">
+                  |             
+------------------|-------------
+name              | Josh Forbes
+computer + OS     | Dell/Windows
+time to complete  | ~15 hours
+partner           | None
+additional help   | Dr. Denning and his videos
+</div>
+
+
+
+
+
+Implementations
+===================
+
+<!--
+Describe how you implemented `HexBoard.java`.
+How did you check whether the game was won by a player?
+-->
+
+The HexBoard implementation was fairly straightforward. Get a coordinate that a player played on, set that tile to the player, check the connecting tiles around it, and then check if the game is over. I would say there were 3 key functions to this implementation. The first and the second are connected which are connections and position value. In order for the union-find object to be able to connect tiles together, the row and col needed to be changed to a single value. Luckily, Dr. Denning did a great job explaining how this was possible.
+The basic conversion was pos = col + (row * size). Next was finding out which tiles to check. I talk about this again in the limitation section, but making sure that the tiles checked were the six next to the tile that was just set and making sure they were played by the same player. The final part was deciding if the game was over. In order to do this, I used virtual nodes that connected the winning positions for player 1 (top and bottom of the board) and for player 2 (right and left side of the board). That way, I only had to check if the virtual nodes were connected and nothing else.
+
+
+`WeightedQuickFindUF` Runtimes
+----------------------
+
+<!--
+Report the runtimes of `HexBoard` using `QuickFindUF` in the tables below.
+First, hold constant the value of $T$ (number of games played), but vary the value of $N$ (size of board).
+Then, hold constant the value of $N$, but vary the value of $T$.
+
+Finally, give a formula using tilde notation for the running time (seconds) of `HexBoardStats.java` as a function of both $N$ (size of board) and $T$ (number of games).
+Model the running time as a power law and be sure to give both the coefficient and exponent of the leading term.
+Your coefficients should be based on _empirical data_ and rounded to two significant digits.
+For example, $5.3 * 10^{-8} * N^{5.0} T^{1.5}$.
+-->
+
+
+<div style="float:right">(keeping $T$ constant)</div>
+
+ $T$ |  $N$   | time (secs)
+:---:|:------:|:----------:
+  1  |  500   | 0.1
+  1  |  1000  | 0.7
+  1  |  2000  | 3.7
+  1  |  4000  | 15.5
+  1  |  8000  | 77.1
+
+
+<div style="float:right">(keeping $N$ constant)</div>
+
+     $T$     | $N$  | time (secs)
+:-----------:|:----:|:----------:
+  100,000    |  15  | 1.4
+  200,000    |  15  | 2.6
+  400,000    |  15  | 4.9
+  800,000    |  15  | 9.9
+  1,600,000  |  15  | 19.5
+
+
+
+
+
+<!--
+Place your runtime below.
+Typeset your answer with double dollar signs: $$ \sim... $$
+-->
+
+Running time as a function of $N$ and $T$:
+
+$$ \sim 1.29 * 10^{-6.0} * N^{2.2} T^{1.0} $$
+
+
+`QuickUnionUF` Runtimes
+-------------------------------
+
+<!--
+Repeat the previous section, but use `WeightedQuickUnionUF`.
+-->
+
+<div style="float:right">(keeping $T$ constant)</div>
+
+ $T$ | $N$ | time (secs)
+:---:|:---:|:----------:
+  1  |  500   | 0.17
+  1  |  1000  | 1.6
+  1  |  2000  | 15.1
+  1  |  4000  | 157.7
+  1  |  8000  | 1640.5
+
+
+<div style="float:right">(keeping $N$ constant)</div>
+
+
+     $T$    | $N$ | time (secs)
+:----------:|:---:|:----------:
+  200,000   |  15 | 5.4
+  400,000   |  15 | 10.6
+  800,000   |  15 | 21.1
+  1,600,000 |  15 | 42.4
+  3,200,000 |  15 | 83.6
+
+
+
+<!--
+Place your runtime below.
+Typeset your answer with double dollar signs: $$ \sim... $$
+-->
+
+Running time as a function of $N$ and $T$:
+
+$$ \sim 2.05 * 10^{-10.0} * N^{3.3} T^{1.0} $$
+
+Results Summary
+---------------
+It is clear to note that while the weighted quick-find was still N^2 and not linear, it was much faster than the normal
+quick-find that was N^3. I think the weighted quick-find could have been closer to linear if I had a better implementation,
+but the times were still better than the normal quick-find. I should note that when we changed the T variable the time was
+linear. This is because each game should take the same amount of time roughly. 
+
+Patterns
+--------
+
+<!--
+Run `HexBoardStats` with `N0 = 2`, `N1 = 15`, and `T = 100000`.
+What patterns do you see emerge from the probability estimates?
+Add a table or chart if necessary.
+-->
+
+$T$ | $N$ | Prob (for player 1, %)
+:---:|:---:|:--------------------:
+100k  |  5  | 50
+100k  |  6  | 50
+100k  |  7  | 50
+100k  |  8  | 50
+100k  |  9  | 60
+100k  |  10 | 50
+
+The games were very close to 50/50 no matter how many games were played. I did testings on 10k, 100k, and 500k
+and on each one over 10 of the 14 board sizes had a 50/50 probability for player 1 and 2. Above is a table
+example of 100k games played on board size of 5-10 and every game but 1 ended with a 50% win split. In the few
+examples where the split wasn't 50/50, the split was 60/40 where player 1 had the advantage. I don't think this
+is enough evidence to show that player 1 is favored. One other unique pattern was that on a board size of 2, the
+60/40 split usually went to player 2 (player 2 had 60%). This means on the smaller board size player 2 was
+slightly favored which I would have thought player 1 was favored.
+
+
+
+
+Known bugs / limitations
+-------------------------
+
+<!--
+What bugs or limitations were troublesome?
+What bugs or limitations still remain?
+Are these bugs or limitations a problem in your implementation, algorithm, or something else?
+How do you know that you did not miss a bug?
+What additional tests did you run to ensure that your implementations are correct?
+-->
+
+In the beginning, the main bug was trying to figure out which coordinates were legal and dealing with
+the tile connections. I had to get out a whiteboard and figure out the pattern of which coordinates to check. I also forgot to make my implementation for different board sizes, at first I was just making it for board size 5, so I had to go back and fix that.
+The biggest limitation for me was dealing with the backwash. The implementation I chose was to create a second union-find object. One of them used the virtual nodes, and one didn't. This way the tiles that were connected to a virtual node but not the winning path, wouldn't light up. However, this implementation used more memory and I lost efficiency without the use of virtual nodes in the OnWiningPath function. I want to say this is a alogirhtm limitation because the union-find doesn't deal with how things are connected so I did the best with what I could. I am willing to admit that there is probably (high probability) a way to implement the union-find in a better way than I could.
+To my knowledge that is the only bug. My main way to test against bugs was to try random patterns on the Hex Board and patterns that I thought would cause it to fail. I also changed the arguments passed in and used the HexBoardVisualizer to use the tests that were provided.
+
+
+
+
+Reflection
+===========
+
+<!--
+Describe whatever help (if any) that you received.
+Don't include readings, lectures, but do include any help from people (including course staff, lab TAs, classmates, and friends) and attribute them by name.
+How did you discuss the problem with others? (ex: white-board algorithms, looking over code for bugs, looking at print out results, etc.)
+Describe any serious problems you encountered.
+How much time did you spend writing new code, debugging code, thinking about the algorithms, discussing with someone else, running tests, writing comments and documentation, etc.?
+List any other comments here.
+Feel free to provide any feedback on how much you learned from doing the assignment, and whether you enjoyed doing it.
+-->
+
+The main help I received was from Dr. Denning and just talking to him. His videos in the write-up were also very helpful. I also talked to my roommate Nathan and bounced ideas off him, although he never looked at or helped me with my code.
+I mainly discussed the problem with the whiteboard and drew what I was thinking. I didn't have too many problems other than the backwash problem. The main trouble I had was just getting started on code. I knew how to do most of the code in my head, but getting it started was the biggest trouble. I think I spent 20% of my time thinking, brainstorming, and whiteboarding.
+I only spent about 10% coding, and the other 70% was debugging and trying to better implement the already working code. I think I learned a lot about union-find during the assignment but the main part of the assignment wasn't that hard. I think the main point of the assignment was to start thinking about run time and efficiency which I had to do.
+
+
+
+
+
+
+<!--   Feel free to modify the following to fit a theme of your choosing   -->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"> <!-- a sans-serif font -->
+<style>  /* A TAYLOR-INSPIRED THEME */
+    body {font-family:'Open Sans',sans-serif;}
+    .md a:link, .md a:visited {color:hsl(252,23.0%,44.3%); font-family:'Open Sans',sans-serif;}
+    .md table.table th {background-color:hsl(252,23.0%,44.3%);}
+    .md .noheader th {display:none;}
+    .md .firstcol td:first-child {white-space:pre;color:white;vertical-align:top;font-weight:bold;border-color:black;background:hsl(252,23.0%,54.3%);}
+    .md .firstcol tr:nth-child(even) td:first-child {background:hsl(252,23.0%,44.3%);}
+    .md div.tilde { margin: 5px 0 20px; }
+</style>
+
+
+<!-- ****************************** -->
+<!--    Leave the content below     -->
+<!-- ****************************** -->
+
+<!-- The script and style below are added for clarity and to workaround a bug -->
+<script>
+    // this is a hack to workaround a bug in Markdeep+Mathjax, where
+    // `&#36;`` is automatically converted to `\(`` and `\)`` too soon.
+    // the following code will replace the innerHTML of all elements
+    // with class "dollar" with a dollar sign.
+    setTimeout(function() {
+        var dollars = document.getElementsByClassName('dollar');
+        for(var i = 0; i < dollars.length; i++) {
+            dollars[i].innerHTML = '&#' + '36;'; // split to prevent conversion to $
+        }
+    }, 1000);
+</script>
+<style>
+    /* adding some styling to <code> tags (but not <pre><code> coding blocks!) */
+    :not(pre) > code {
+        background-color: rgba(0,0,0,0.05);
+        outline: 1px solid rgba(0,0,0,0.15);
+        margin-left: 0.25em;
+        margin-right: 0.25em;
+    }
+    /* fixes table of contents of medium-length document from looking weird if admonitions are behind */
+    .md div.mediumTOC { background: white; }
+    .md div.admonition { position: initial !important; }
+</style>
+
+<!--   Leave the following Markdeep formatting code, as this will format your text above to look nice in a wed browser   -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script src="https://casual-effects.com/markdeep/latest/markdeep.min.js"></script>
+<script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible");</script>
